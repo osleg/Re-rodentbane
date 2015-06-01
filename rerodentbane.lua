@@ -72,7 +72,7 @@ local function debuginfo( message )
 end
 -- }}}
 
--- {{{ Clear wiboxes
+-- {{{ Clean wiboxes
 local function clean()
     -- Hide all wiboxes
     for border, box in pairs(wiboxes) do
@@ -96,7 +96,7 @@ local function init()
     wiboxes = {}
 
     -- Borders
-    local borders = {"horiz", "vert", "left", "right", "top", "bottom"}
+    local borders = {"horiz1", "vert1", "horiz2", "vert2", "left", "right", "top", "bottom"}
 
     -- Create wibox for each border
     for i, border in ipairs(borders) do
@@ -117,7 +117,7 @@ local function draw(area)
     local rwidth = beautiful.rodentbane_width or 1
 
     -- Stop if the area is too small
-    if ar.width < rwidth*3 or ar.height < rwidth*3 then
+    if ar.width < rwidth*4 or ar.height < rwidth*4 then
         stop()
         return false
     end
@@ -129,75 +129,114 @@ local function draw(area)
 
     clean()
 
-    -- Horizontal border
-    wiboxes.horiz:geometry({
+    -- {{{ Layout
+    -- {{{ Horizontal border top
+    wiboxes.horiz1:geometry({
         x = ar.x+rwidth,
-        y = ar.y+math.floor(ar.height/2),
+        y = ar.y+math.floor(ar.height/3),
         height = rwidth,
-        width = ar.width-(rwidth*2),
+        width = ar.width-(rwidth*3),
     })
+    -- }}}
 
-    -- Vertical border
-    wiboxes.vert:geometry({
-        x = ar.x+math.floor(ar.width/2),
+    -- {{{ Horizontal border bottom
+    wiboxes.horiz2:geometry({
+        x = ar.x+rwidth,
+        y = (ar.y+math.floor(ar.height/3*2)),
+        height = rwidth,
+        width = ar.width-(rwidth*3),
+    })
+    -- }}}
+
+    -- {{{ Vertical border left
+    wiboxes.vert1:geometry({
+        x = ar.x+math.floor(ar.width/3),
         y = ar.y+rwidth,
         width = rwidth,
-        height = ar.height-(rwidth*2),
+        height = ar.height-(rwidth*3),
     })
+    -- }}}
 
-    -- Left border
+    -- {{{ Vertical border right
+    wiboxes.vert2:geometry({
+        x = ar.x+math.floor(ar.width/3*2),
+        y = ar.y+rwidth,
+        width = rwidth,
+        height = ar.height-(rwidth*3),
+    })
+    -- }}}
+
+    -- {{{ Left border
     wiboxes.left:geometry({
         x = ar.x,
         y = ar.y,
         width = rwidth,
         height = ar.height,
     })
+    -- }}}
 
-    -- Right border
+    -- {{{ Right border
     wiboxes.right:geometry({
         x = ar.x+ar.width-rwidth,
         y = ar.y,
         width = rwidth,
         height = ar.height,
     })
+    -- }}}
 
-    -- Top border
+    -- {{{ Top border
     wiboxes.top:geometry({
         x = ar.x,
         y = ar.y,
         height = rwidth,
         width = ar.width,
     })
+    -- }}}
 
-    -- Bottom border
+    -- {{{ Bottom border
     wiboxes.bottom:geometry({
         x = ar.x,
         y = ar.y+ar.height-rwidth,
         height = rwidth,
         width = ar.width,
     })
+    -- }}}
+    -- }}}
     for k, v in pairs(wiboxes) do v.visible = true end
 end
 -- }}}
 
 -- {{{ Cut the navigation area into a direction.
--- @param dir Direction to cut to {"up", "right", "down", "left"}.
+-- @param dir Direction to cut to {"tl", "tm", "tr", "ml", "mm", "mr", "bl", "bm", "br"}.
 local function cut(dir)
     -- Store previous area
     table.insert(history, 1, awful.util.table.join(current))
 
-    -- Cut in a direction
-    if dir == "up" then
-        current.height = math.floor(current.height/2)
-    elseif dir == "down" then
-        current.y = current.y+math.floor(current.height/2)
-        current.height = math.floor(current.height/2)
-    elseif dir == "left" then
-        current.width = math.floor(current.width/2)
-    elseif dir == "right" then
-        current.x = current.x+math.floor(current.width/2)
-        current.width = math.floor(current.width/2)
+    if dir == "tl" then
+        ;
+    elseif dir == "tm" then
+        current.x = current.x + math.floor(current.width/3)
+    elseif dir == "tr" then
+        current.x = current.x + (math.floor(current.width/3 * 2))
+    elseif dir == "ml" then
+        current.y = current.y + math.floor(current.height/3)
+    elseif dir == "mm" then
+        current.y = current.y + math.floor(current.height/3)
+        current.x = current.x + math.floor(current.width/3)
+    elseif dir == "mr" then
+        current.y = current.y + math.floor(current.height/3)
+        current.x = current.x + (math.floor(current.width/3 * 2))
+    elseif dir == "bl" then
+        current.y = current.y + (math.floor(current.height/3 * 2))
+    elseif dir == "bm" then
+        current.y = current.y + (math.floor(current.height/3 * 2))
+        current.x = current.x + (math.floor(current.width/3))
+    elseif dir == "br" then
+        current.y = current.y + (math.floor(current.height/3 * 2))
+        current.x = current.x + (math.floor(current.width/3))
     end
+    current.height = math.floor(current.height/3)
+    current.width = math.floor(current.width/3)
 
     -- Redraw the box
     draw()
@@ -316,10 +355,15 @@ end
 --{{{ Convenience function to bind to default keys.
 local function binddefault()
     -- Cut with hjkl
-    bind({}, "h", {cut, "left"})
-    bind({}, "j", {cut, "down"})
-    bind({}, "k", {cut, "up"})
-    bind({}, "l", {cut, "right"})
+    bind({}, "u", {cut, "tl"})
+    bind({}, "i", {cut, "tm"})
+    bind({}, "o", {cut, "tr"})
+    bind({}, "j", {cut, "ml"})
+    bind({}, "k", {cut, "mm"})
+    bind({}, "l", {cut, "mr"})
+    bind({}, "m", {cut, "bl"})
+    bind({}, ",", {cut, "bm"})
+    bind({}, ".", {cut, "br"})
 
     -- Move with Shift+hjkl
     bind({"Shift"}, "h", {move, "left"})
@@ -338,7 +382,7 @@ local function binddefault()
     end)
 
     -- Double Left click with alt+space
-    bind({"Mod1"}, "Space", function ()
+    bind({"Control"}, "Space", function ()
         warp()
         click()
         click()
@@ -346,14 +390,14 @@ local function binddefault()
     end)
 
     -- Middle click with Control+space
-    bind({"Control"}, "Space", function ()
+    bind({"Shift"}, "Space", function ()
         warp()
         click(2)
         stop()
     end)
 
     -- Right click with shift+space
-    bind({"Shift"}, "Space", function ()
+    bind({"Mod1"}, "Space", function ()
         warp()
         click(3)
         stop()
