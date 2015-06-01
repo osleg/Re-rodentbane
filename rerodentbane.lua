@@ -361,9 +361,9 @@ local function binddefault()
     bind({}, "j", {cut, "ml"})
     bind({}, "k", {cut, "mm"})
     bind({}, "l", {cut, "mr"})
-    bind({}, "m", {cut, "bl"})
-    bind({}, ",", {cut, "bm"})
-    bind({}, ".", {cut, "br"})
+    bind({}, "n", {cut, "bl"})
+    bind({}, "m", {cut, "bm"})
+    bind({}, ",", {cut, "br"})
 
     -- Move with Shift+hjkl
     bind({"Shift"}, "h", {move, "left"})
