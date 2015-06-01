@@ -13,7 +13,7 @@ Restart awesome and join the fun!
 ## Usage
 Invoking the rerodenbane will draw a grid of 9 boxes
 Each box have one button assigned
-
+```
 +-+-+-+
 |u|i|o|
 +-+-+-+                                         
@@ -21,6 +21,7 @@ Each box have one button assigned
 +-+-+-+
 |n|m|,|
 +-+-+-+
+```
 
 Pressing one the key will redraw the grid smaller in the area selected.
 In average it takes as much as 3 keypresses to get to the place required
