@@ -7,7 +7,7 @@ Add a keybind to start the rodentbane to globalkeys eg:
 ```
 awful.key({modkey, }, "q", rerodentbane)
 ```
-
+This plugin requires xdotool or xte to work (NOTE: xte not tested)
 Restart awesome and join the fun!
 
 ## Usage
