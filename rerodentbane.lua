@@ -326,17 +326,8 @@ local function click(button)
     -- Default to left click
     local b = button or 1
 
-    -- TODO: Figure out a way to use fake_input for clicks
-    --capi.root.fake_input("button_press", button)
-    --capi.root.fake_input("button_release", button)
-
-    -- Use xdotool when available, otherwise try xte
-    command = "xdotool click "..b.." &> /dev/null"
-      .." || xte 'mouseclick "..b.."' &> /dev/null"
-      .." || echo 'W: rodentbane: either xdotool or xte"
-      .." is required to emulate mouse clicks, neither was found.'"
-
-    awful.util.spawn_with_shell(command)
+    capi.root.fake_input("button_press", b)
+    capi.root.fake_input("button_release", b)
 end
 -- }}}
 
