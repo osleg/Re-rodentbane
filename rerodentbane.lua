@@ -371,8 +371,8 @@ local function binddefault()
     bind({"Shift"}, "k", {move, "up"})
     bind({"Shift"}, "l", {move, "right"})
 
-    -- Undo with u
-    bind({}, "u", undo)
+    -- Undo with p
+    bind({}, "p", undo)
 
     -- Left click with space
     bind({}, "Space", function ()
@@ -381,7 +381,7 @@ local function binddefault()
         stop()
     end)
 
-    -- Double Left click with alt+space
+    -- Double Left click with ctrl+space
     bind({"Control"}, "Space", function ()
         warp()
         click()
@@ -389,14 +389,14 @@ local function binddefault()
         stop()
     end)
 
-    -- Middle click with Control+space
+    -- Middle click with shift+space
     bind({"Shift"}, "Space", function ()
         warp()
         click(2)
         stop()
     end)
 
-    -- Right click with shift+space
+    -- Right click with alt+space
     bind({"Mod1"}, "Space", function ()
         warp()
         click(3)

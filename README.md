@@ -10,22 +10,42 @@ awful.key({modkey, }, "q", rerodentbane)
 
 Restart awesome and join the fun!
 
+## Usage
+Invoking the rerodenbane will draw a grid of 9 boxes
+Each box have one button assigned
+
++-+-+-+
+|u|i|o|
++-+-+-+                                         
+|j|k|l|
++-+-+-+
+|n|m|,|
++-+-+-+
+
+Pressing one the key will redraw the grid smaller in the area selected.
+In average it takes as much as 3 keypresses to get to the place required
 Default keybinds for rodentbane:
 ```
 Resize grid:
-  h, j, k, l
+  +-+-+-+
+  |u|i|o|
+  +-+-+-+                                         
+  |j|k|l|
+  +-+-+-+
+  |n|m|,|
+  +-+-+-+
 Move grid:
   SHIFT + h, j, k, l
 Undo last move/resize:
-  u
+  p
 Left click:
   Space
 Right click:
-  Shift+Space
-Middle click:
-  Control+Space
-Double click:
   Alt+Space
+Middle click:
+  Shift+Space
+Double click:
+  Control+Space
 Only move mouse:
   Return
 ```
