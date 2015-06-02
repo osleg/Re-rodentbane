@@ -58,3 +58,10 @@ rerodentbane.bind({"Control"}, "h", function()
     rerodentbane.stop() -- Leave rerodentbane mode
 end)
 ```
+
+Available functions are:
+  * click_press(button)
+  * click_release(button)
+  * click(button)
+  * warp
+  * stop()
