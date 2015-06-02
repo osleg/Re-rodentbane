@@ -84,7 +84,7 @@ end
 -- }}}
 
 -- {{{ Stop the navigation sequence without doing anything.
-local function stop()
+function rerodentbane.stop()
     -- Stop the keygrabber
     capi.keygrabber.stop()
     clean()
@@ -313,7 +313,7 @@ end
 -- }}}
 
 -- {{{ Warp the mouse to the center of the navigation area
-local function warp()
+function rerodentbane.warp()
     capi.mouse.coords({
         x = current.x+(current.width/2),
         y = current.y+(current.height/2),
@@ -322,7 +322,7 @@ end
 -- }}}
 
 -- {{{ Click button and hold
-local function click_press(button)
+function rerodentbane.click_press(button)
     local b = button or 1
 
     capi.root.fake_input("button_press", b)
@@ -330,7 +330,7 @@ end
 -- }}}
 
 -- {{{ Click button release
-local function click_release(button)
+function rerodentbane.click_release(button)
     local b = button or 1
 
     capi.root.fake_input("button_release", b)
@@ -339,7 +339,7 @@ end
 
 -- {{{ Click with a button
 -- @param button Button number to click with, defaults to left (1)
-local function click(button)
+function rerodentbane.click(button)
     -- Default to left click
     local b = button or 1
     click_press(b)

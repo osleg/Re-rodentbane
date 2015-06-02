@@ -14,11 +14,11 @@ Invoking the rerodenbane will draw a grid of 9 boxes
 Each box have one button assigned
 ```
 +-+-+-+
-|u|i|o|
+|a|k|f|
 +-+-+-+                                         
-|j|k|l|
+|h|;|l|
 +-+-+-+
-|n|m|,|
+|s|j|d|
 +-+-+-+
 ```
 
@@ -28,16 +28,16 @@ Default keybinds for rodentbane:
 ```
 Resize grid:
   +-+-+-+
-  |u|i|o|
+  |a|k|f|
   +-+-+-+                                         
-  |j|k|l|
+  |h|;|l|
   +-+-+-+
-  |n|m|,|
+  |s|j|d|
   +-+-+-+
 Move grid:
   SHIFT + h, j, k, l
 Undo last move/resize:
-  p
+  u
 Left click:
   Space
 Right click:
@@ -48,4 +48,13 @@ Double click:
   Control+Space
 Only move mouse:
   Return
+```
+You can modify the keys by calling `rerodentbane.bind({modkeys}, key, function)`.
+Note that this will disable default bindings.
+```
+rerodentbane.bind({"Control"}, "h", function()
+    rerodentbane.warp() -- Place the cursor in the center of the active area
+    rerodentbane.click(1) -- Click button 1 (left)
+    rerodentbane.stop() -- Leave rerodentbane mode
+end)
 ```
