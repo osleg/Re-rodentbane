@@ -342,8 +342,8 @@ end
 function rerodentbane.click(button)
     -- Default to left click
     local b = button or 1
-    click_press(b)
-    click_release(b)
+    rerodentbane.click_press(b)
+    rerodentbane.click_release(b)
 end
 -- }}}
 
@@ -362,6 +362,7 @@ end
 --{{{ Convenience function to bind to default keys.
 local function binddefault()
     -- Cut with asdfhjkl;
+    local bind = rerodentbane.bind
     bind({}, "a", {cut, "tl"})
     bind({}, "k", {cut, "tm"})
     bind({}, "f", {cut, "tr"})
@@ -383,36 +384,36 @@ local function binddefault()
 
     -- Left click with space
     bind({}, "Space", function ()
-        warp()
-        click()
-        stop()
+        rerodentbane.warp()
+        rerodentbane.click()
+        rerodentbane.stop()
     end)
 
     -- Double Left click with ctrl+space
     bind({"Control"}, "Space", function ()
-        warp()
-        click()
-        click()
-        stop()
+        rerodentbane.warp()
+        rerodentbane.click()
+        rerodentbane.click()
+        rerodentbane.stop()
     end)
 
     -- Middle click with shift+space
     bind({"Shift"}, "Space", function ()
-        warp()
-        click(2)
-        stop()
+        rerodentbane.warp()
+        rerodentbane.click(2)
+        rerodentbane.stop()
     end)
 
     -- Right click with alt+space
     bind({"Mod1"}, "Space", function ()
-        warp()
-        click(3)
-        stop()
+        rerodentbane.warp()
+        rerodentbane.click(3)
+        rerodentbane.stop()
     end)
 
     -- Only warp with return
     bind({}, "Return", function ()
-        warp()
+        rerodentbane.warp()
     end)
 end
 -- }}}
