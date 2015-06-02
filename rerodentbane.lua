@@ -56,6 +56,7 @@ local bindings = {}
 local history = {}
 local current = nil
 local wiboxes = nil
+local dnd = {}
     -- }}}
 -- }}}
 
@@ -274,7 +275,7 @@ end
 -- @param modkeys Modifier key combination to bind to.
 -- @param key Main key to bind to.
 -- @param func Function to bind the keys to.
-local function bind(modkeys, key, func)
+function rerodentbane.bind(modkeys, key, func)
     -- Create binding
     local bind = {modkeys, key, func}
 
@@ -320,14 +321,29 @@ local function warp()
 end
 -- }}}
 
+-- {{{ Click button and hold
+local function click_press(button)
+    local b = button or 1
+
+    capi.root.fake_input("button_press", b)
+end
+-- }}}
+
+-- {{{ Click button release
+local function click_release(button)
+    local b = button or 1
+
+    capi.root.fake_input("button_release", b)
+end
+-- }}}
+
 -- {{{ Click with a button
 -- @param button Button number to click with, defaults to left (1)
 local function click(button)
     -- Default to left click
     local b = button or 1
-
-    capi.root.fake_input("button_press", b)
-    capi.root.fake_input("button_release", b)
+    click_press(b)
+    click_release(b)
 end
 -- }}}
 
@@ -345,16 +361,16 @@ end
 
 --{{{ Convenience function to bind to default keys.
 local function binddefault()
-    -- Cut with hjkl
-    bind({}, "u", {cut, "tl"})
-    bind({}, "i", {cut, "tm"})
-    bind({}, "o", {cut, "tr"})
-    bind({}, "j", {cut, "ml"})
-    bind({}, "k", {cut, "mm"})
+    -- Cut with asdfhjkl;
+    bind({}, "a", {cut, "tl"})
+    bind({}, "k", {cut, "tm"})
+    bind({}, "f", {cut, "tr"})
+    bind({}, "h", {cut, "ml"})
+    bind({}, ";", {cut, "mm"})
     bind({}, "l", {cut, "mr"})
-    bind({}, "n", {cut, "bl"})
-    bind({}, "m", {cut, "bm"})
-    bind({}, ",", {cut, "br"})
+    bind({}, "s", {cut, "bl"})
+    bind({}, "j", {cut, "bm"})
+    bind({}, "d", {cut, "br"})
 
     -- Move with Shift+hjkl
     bind({"Shift"}, "h", {move, "left"})
@@ -362,8 +378,8 @@ local function binddefault()
     bind({"Shift"}, "k", {move, "up"})
     bind({"Shift"}, "l", {move, "right"})
 
-    -- Undo with p
-    bind({}, "p", undo)
+    -- Undo with u
+    bind({}, "u", undo)
 
     -- Left click with space
     bind({}, "Space", function ()
