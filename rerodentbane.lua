@@ -119,7 +119,7 @@ local function draw(area)
 
     -- Stop if the area is too small
     if ar.width < rwidth*4 or ar.height < rwidth*4 then
-        stop()
+        rerodentbane.stop()
         return false
     end
 
@@ -478,7 +478,7 @@ local function keyevent(modkeys, key, evtype)
     end
 
     -- No key was found, stop grabbing
-    stop()
+    rerodentbane.stop()
     return false
 end
 -- }}}
