@@ -523,6 +523,7 @@ function rerodentbane.start(screen, recall)
 end
 -- }}}
 
+rerodentbane.cut = cut
 
 setmetatable(rerodentbane, { __call = function(_, ...) return rerodentbane.start(...) end })
 return rerodentbane
