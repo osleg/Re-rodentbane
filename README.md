@@ -65,3 +65,4 @@ Available functions are:
   * click(button)
   * warp()
   * stop()
+  * cut()
