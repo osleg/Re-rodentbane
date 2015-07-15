@@ -524,6 +524,7 @@ end
 -- }}}
 
 rerodentbane.cut = cut
+rerodentbane.undo = undo
 
 setmetatable(rerodentbane, { __call = function(_, ...) return rerodentbane.start(...) end })
 return rerodentbane
