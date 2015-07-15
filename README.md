@@ -63,5 +63,5 @@ Available functions are:
   * click_press(button)
   * click_release(button)
   * click(button)
-  * warp
+  * warp()
   * stop()
