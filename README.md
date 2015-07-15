@@ -66,3 +66,4 @@ Available functions are:
   * warp()
   * stop()
   * cut()
+  * undo()
