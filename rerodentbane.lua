@@ -234,7 +234,7 @@ local function cut(dir)
         current.x = current.x + (math.floor(current.width/3))
     elseif dir == "br" then
         current.y = current.y + (math.floor(current.height/3 * 2))
-        current.x = current.x + (math.floor(current.width/3))
+        current.x = current.x + (math.floor(current.width/3 * 2))
     end
     current.height = math.floor(current.height/3)
     current.width = math.floor(current.width/3)
