@@ -57,6 +57,7 @@ local history = {}
 local current = nil
 local wiboxes = nil
 local dnd = {}
+local systray = nil
     -- }}}
 -- }}}
 
@@ -91,21 +92,126 @@ function rerodentbane.stop()
 end
 -- }}}
 
--- {{{ Crete the wiboxes to display init()
-local function init()
-    -- Wiboxes table
-    wiboxes = {}
-
-    -- Borders
-    local borders = {"horiz1", "vert1", "horiz2", "vert2", "left", "right", "top", "bottom"}
-
-    -- Create wibox for each border
+-- {{{ Creates wibox for each border
+-- @param borders Table of border names
+local function create_wiboxes(borders)
     for i, border in ipairs(borders) do
         wiboxes[border] = wibox({
             bg = beautiful.rodentbane_bg or beautiful.border_focus or "#C50B0B",
             ontop = true,
         })
     end
+end
+
+-- }}}
+
+-- {{{ Crete the wiboxes to display init()
+local function init()
+    -- Wiboxes table
+    wiboxes = {}
+
+    -- Set systray navigation to false
+    systray = false
+    print("workarea navigation")
+    print(systray)
+
+    -- Borders
+    local borders = {"horiz1", "vert1", "horiz2", "vert2", "left", "right", "top", "bottom"}
+    create_wiboxes(borders)
+
+end
+-- }}}
+
+-- {{{ Create wiboxes for systray navigation
+local function init_systray()
+    wiboxes = {}
+
+    -- set systray navigation to true
+    systray = true
+    print("Systray navigation")
+    print(systray)
+    local borders = {"top", "bottom", "right", "left", "vert1", "vert2"}
+    create_wiboxes(borders)
+end
+-- }}}
+
+-- {{{ Draw the guideline on systray wibox
+-- @param area The area of the screen to draw on, defaults to TOP wibox
+local function draw_systray(area)
+    local ar = area or current
+    local rwidth = beautiful.rodentbane_width or 1
+
+    -- For wibox guidelines we shrink only horizontaly so no need to calculate height
+    if ar.width < rwidth*2 then
+        rerodentbane.stop()
+        return false
+    end
+
+    for border, box in pairs(wiboxes) do
+        box.screen = ar.screen
+    end
+
+    clean()
+
+    -- {{{ Layout
+
+    -- {{{ Left border
+    wiboxes.left:geometry({
+        x = ar.x,
+        y = ar.y,
+        width = rwidth,
+        height = ar.height,
+    })
+    -- }}}
+
+    -- {{{ Right border
+    wiboxes.right:geometry({
+        x = ar.x+ar.width-rwidth,
+        y = ar.y,
+        width = rwidth,
+        height = ar.height,
+    })
+    -- }}}
+
+    -- {{{ Top border
+    wiboxes.top:geometry({
+        x = ar.x,
+        y = ar.y,
+        height = rwidth,
+        width = ar.width,
+    })
+    -- }}}
+
+    -- {{{ Bottom border
+    wiboxes.bottom:geometry({
+        x = ar.x,
+        y = ar.y+ar.height-rwidth,
+        height = rwidth,
+        width = ar.width,
+    })
+    -- }}}
+
+    -- {{{ Vertical border left
+    wiboxes.vert1:geometry({
+        x = ar.x+math.floor(ar.width/3),
+        y = ar.y+rwidth,
+        width = rwidth,
+        height = ar.height-(rwidth*3),
+    })
+    -- }}}
+
+    -- {{{ Vertical border right
+    wiboxes.vert2:geometry({
+        x = ar.x+math.floor(ar.width/3*2),
+        y = ar.y+rwidth,
+        width = rwidth,
+        height = ar.height-(rwidth*3),
+    })
+    -- }}}
+
+    -- }}}
+
+    for k, v in pairs(wiboxes) do v.visible = true end
 end
 -- }}}
 
@@ -216,31 +322,50 @@ local function cut(dir)
     if dir == "tl" then
         ;
     elseif dir == "tm" then
-        current.x = current.x + math.floor(current.width/3)
+            current.x = current.x + math.floor(current.width/3)
     elseif dir == "tr" then
-        current.x = current.x + (math.floor(current.width/3 * 2))
+            current.x = current.x + (math.floor(current.width/3 * 2))
     elseif dir == "ml" then
-        current.y = current.y + math.floor(current.height/3)
+        if not systray then
+            current.y = current.y + math.floor(current.height/3)
+        end
     elseif dir == "mm" then
-        current.y = current.y + math.floor(current.height/3)
+        if not systray then
+            current.y = current.y + math.floor(current.height/3)
+        end
         current.x = current.x + math.floor(current.width/3)
     elseif dir == "mr" then
-        current.y = current.y + math.floor(current.height/3)
+        if not systray then
+            current.y = current.y + math.floor(current.height/3)
+        end
         current.x = current.x + (math.floor(current.width/3 * 2))
     elseif dir == "bl" then
-        current.y = current.y + (math.floor(current.height/3 * 2))
+        if not systray then
+            current.y = current.y + (math.floor(current.height/3 * 2))
+        end
     elseif dir == "bm" then
-        current.y = current.y + (math.floor(current.height/3 * 2))
-        current.x = current.x + (math.floor(current.width/3))
+        if not systray then
+            current.y = current.y + (math.floor(current.height/3 * 2))
+        end
+            current.x = current.x + (math.floor(current.width/3))
     elseif dir == "br" then
-        current.y = current.y + (math.floor(current.height/3 * 2))
-        current.x = current.x + (math.floor(current.width/3 * 2))
+        if not systray then
+            current.y = current.y + (math.floor(current.height/3 * 2))
+        end
+            current.x = current.x + (math.floor(current.width/3 * 2))
     end
-    current.height = math.floor(current.height/3)
-    current.width = math.floor(current.width/3)
+
+    if not systray then
+        current.height = math.floor(current.height/3)
+    end
+        current.width = math.floor(current.width/3)
 
     -- Redraw the box
-    draw()
+    if not systray then
+        draw()
+    else
+        draw_systray()
+    end
 end
 -- }}}
 
@@ -267,7 +392,11 @@ local function move(dir, ratio)
     end
 
     -- Redraw the box
-    draw()
+    if not systray then
+        draw()
+    else
+        draw_systray()
+    end
 end
 -- }}}
 
@@ -483,6 +612,27 @@ local function keyevent(modkeys, key, evtype)
 end
 -- }}}
 
+-- {{{ Widget initialization
+-- @params wibox Boolean, if True initializing for top bar
+local function init_widgets(wibox)
+    -- Initialise if not already done
+    local for_wibox = wibox or false
+    if wiboxes == nil then
+        -- Add default bindings if we have none ourselves
+        if #bindings == 0 then
+            binddefault()
+        end
+    end
+
+    -- Create the wiboxes
+    if for_wibox then
+        init_systray()
+    else
+        init()
+    end
+end
+-- }}}
+
 -- {{{ Start the navigation sequence.
 -- @param screen Screen to start navigation on, defaults to current screen.
 -- @param recall Whether the previous area should be recalled (defaults to
@@ -491,17 +641,7 @@ function rerodentbane.start(screen, recall)
     -- Default to current screen
     local scr = screen or capi.mouse.screen
 
-    -- Initialise if not already done
-    if wiboxes == nil then
-        -- Add default bindings if we have none ourselves
-        if #bindings == 0 then
-            binddefault()
-        end
-
-        -- Create the wiboxes
-        init()
-    end
-
+    init_widgets()
     -- Empty current area if needed
     if not recall then
         -- Start with a complete area
@@ -520,6 +660,30 @@ function rerodentbane.start(screen, recall)
     -- Start the keygrabber
     capi.keygrabber.run(keyevent)
 
+end
+-- }}}
+
+-- {{{ Start navigation sequence over wibox
+-- @param screen Screen to start navigation on
+function rerodentbane.start_systray(screen, height)
+    -- default to screen 0 since systray is usually only there
+    local scr = screen or 1.0
+
+    init_widgets(true)
+
+    -- Make the size of the wibox eq to height of wibox
+    current = capi.screen[scr].workarea
+    current.y = 0
+    current.height = height or beautiful.awful_widget_height
+    -- empty history
+    history = {}
+
+    current.screen = scr
+
+    draw_systray()
+
+    -- Start the kg
+    capi.keygrabber.run(keyevent)
 end
 -- }}}
 
